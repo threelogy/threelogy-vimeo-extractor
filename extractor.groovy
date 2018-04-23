@@ -87,19 +87,37 @@ class Video{
 
 VimeoExtractor x = new VimeoExtractor("6db0c4c5f8d1dd2b520cf0781ae4d1dc")
 
-x.albums.each{ Album album ->
-	println "*******"
-	println "name: ${album.name}"
-	println "link: ${album.link}"
-	println "videos: "
+File file = new File('output.html')
+file.write('')
 
-	x.getVideos(album).each{ Video video ->
-		println "    ------"
-		println "    name: ${video.name}"
-		println "    link: ${video.link}"
-		println "    playerUrl: ${video.playerUrl}"
-		println "    imageLargeUrl: ${video.imageLargeUrl}"
-		println "    imageSmallUrl: ${video.imageSmallUrl}"
-		println "    ------"
-	}
+file << "<ul>"
+x.albums.each{ Album album ->
+	file << "<li>"
+
+		file << "<ul>"
+			file << "<li>name: ${album.name}</li>"
+			file << "<li>link: ${album.link}</li>"
+			file << "<li>videos: "
+			x.getVideos(album).each{ Video video ->
+				file << "    <ul>"
+				file << "       <li>name: ${video.name}</li>"
+				file << "       <li>link: ${video.link}</li>"
+				file << "       <li>playerUrl: ${video.playerUrl}</li>"
+				file << "       <li>imageLargeUrl: ${video.imageLargeUrl}</li>"
+				file << "       <li>imageSmallUrl: ${video.imageSmallUrl}</li>"
+				file << "    </ul>"
+			}
+			file << "</li>"
+		file << "</ul>"
+
+	file << "</li>"
+}
+
+file << "</ul>"
+
+
+if (System.properties['os.name'].toLowerCase().contains('windows')) {
+	"start ${file}".execute()
+} else {
+	"open ${file}".execute()
 }
