@@ -90,30 +90,31 @@ VimeoExtractor x = new VimeoExtractor("6db0c4c5f8d1dd2b520cf0781ae4d1dc")
 File file = new File('output.html')
 file.write('')
 
-file << "<ul>"
+file << "<html><body>\n"
+file << "<ul>\n"
 x.albums.each{ Album album ->
-	file << "<li>"
-
-		file << "<ul>"
-			file << "<li>name: ${album.name}</li>"
-			file << "<li>link: ${album.link}</li>"
-			file << "<li>videos: "
+	file << "<li>\n"
+		println "Album: ${album.name} (${album.link})"
+		file << "Album: ${album.name} <a href='${album.link}'>${album.link}</a>\n"
+		file << "<ul>\n"
 			x.getVideos(album).each{ Video video ->
-				file << "    <ul>"
-				file << "       <li>name: ${video.name}</li>"
-				file << "       <li>link: ${video.link}</li>"
-				file << "       <li>playerUrl: ${video.playerUrl}</li>"
-				file << "       <li>imageLargeUrl: ${video.imageLargeUrl}</li>"
-				file << "       <li>imageSmallUrl: ${video.imageSmallUrl}</li>"
-				file << "    </ul>"
+				println "   Video: ${video.name} (${video.link})"
+				file << "    <li>Video: ${video.name}\n"
+				file << "    	<div><img src='${video.imageSmallUrl}' width='300px'/></div>"
+				file << "    	<ul>\n"
+				file << "       <li>link: <a href='${video.link}'>${video.link}</a></li>\n"
+				file << "       <li>playerUrl: ${video.playerUrl}</li>\n"
+				file << "       <li>imageLargeUrl: ${video.imageLargeUrl}</li>\n"
+				file << "       <li>imageSmallUrl: ${video.imageSmallUrl}</li>\n"
+				file << "    	</ul>\n"
+				file << "		 </li>"
 			}
-			file << "</li>"
-		file << "</ul>"
-
-	file << "</li>"
+		file << "</ul>\n"
+	file << "</li>\n"
 }
 
-file << "</ul>"
+file << "</ul>\n"
+file << "</body></html>\n"
 
 
 if (System.properties['os.name'].toLowerCase().contains('windows')) {
