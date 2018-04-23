@@ -118,7 +118,7 @@ file << "</body></html>\n"
 
 
 if (System.properties['os.name'].toLowerCase().contains('windows')) {
-	"start ${file}".execute()
+	"cmd /k start ${file}".execute()
 } else {
 	"open ${file}".execute()
 }
